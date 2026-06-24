@@ -414,7 +414,6 @@ func TestDockerFilesystemStats(t *testing.T) {
 		t.Skip("Filesystem stats not available on this platform/configuration")
 	}
 
-
 	if !pass {
 		t.Fail()
 	}
