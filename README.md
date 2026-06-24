@@ -1,4 +1,4 @@
-![cAdvisor](logo.png "cAdvisor")
+![cAdvisor](logo.png "cAdvisor") 
 
 ![test status](https://github.com/google/cadvisor/workflows/Test/badge.svg)
 
