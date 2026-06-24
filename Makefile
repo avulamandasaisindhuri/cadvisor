@@ -99,15 +99,15 @@ lint:
 	@GOT=$$(golangci-lint version 2>/dev/null | sed 's/^.* version \([^ ]*\) .*$$/\1/'); \
 	if ! printf $(GOLANGCI_VER)\\n$$GOT\\n | sort --version-sort --check=quiet; then \
 		echo ">> upgrading golangci-lint from $$GOT to $(GOLANGCI_VER)"; \
-		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH)/bin v$(GOLANGCI_VER); \
+		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(GOTOOLCHAIN=auto go env GOPATH)/bin v$(GOLANGCI_VER); \
 		GOT=$(GOLANGCI_VER); \
 	else \
 		echo ">> using installed golangci-lint $$GOT >= $(GOLANGCI_VER)"; \
 	fi
 	@echo ">> running golangci-lint using configuration at .golangci.yml"
-	@golangci-lint run
-	@cd cmd && golangci-lint run
-	@cd lib && golangci-lint run
+	@GOTOOLCHAIN=auto golangci-lint run
+	@cd cmd && GOTOOLCHAIN=auto golangci-lint run
+	@cd lib && GOTOOLCHAIN=auto golangci-lint run
 
 clean:
 	@rm -f *.test cadvisor
