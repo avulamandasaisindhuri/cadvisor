@@ -26,6 +26,7 @@ jobs:
       env:
         GOLANG_VERSION: ${{ matrix.go-versions }}
       run: |
+        go env GOARCH
         source ${{ matrix.environment-variables }}
         make test
   test-integration:
@@ -55,6 +56,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v6
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
     - name: Run integration tests
       env:
         GOLANG_VERSION: ${{ matrix.go-versions }}
@@ -79,6 +82,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v6
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
     - name: Run CRI-O integration tests
       env:
         GOLANG_VERSION: ${{ matrix.go-versions }}
