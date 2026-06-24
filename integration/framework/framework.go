@@ -314,7 +314,7 @@ func (f *realFramework) ClientV2() *v2.Client {
 
 func (a dockerActions) RunPause() string {
 	return a.Run(DockerRunArgs{
-		Image: "registry.k8s.io/pause",
+		Image: "registry.k8s.io/pause:3.10",
 	})
 }
 
@@ -501,7 +501,7 @@ type crioContainerConfig struct {
 
 func (a *crioActions) RunPause() string {
 	return a.Run(CrioRunArgs{
-		Image: "registry.k8s.io/pause:3.9",
+		Image: "registry.k8s.io/pause:3.10",
 	})
 }
 

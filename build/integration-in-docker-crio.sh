@@ -31,13 +31,13 @@ trap delete EXIT INT TERM
 function run_tests() {
 
   # Detect architecture - the bootstrap image is amd64-only
-  DOCKER_PLATFORM="linux/amd64"
+  DOCKER_PLATFORM="linux/s390x"
 
   # Add safe.directory as workaround for https://github.com/actions/runner/issues/2033
   # Build for amd64 to match the test container
-  BUILD_CMD="git config --global safe.directory /go/src/github.com/google/cadvisor && env GOOS=linux GOARCH=amd64 GO_FLAGS='$GO_FLAGS' CGO_ENABLED=0 ./build/build.sh && \
-    env GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go test -c github.com/google/cadvisor/integration/tests/crio && \
-    env GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go test -c github.com/google/cadvisor/integration/tests/common"
+  BUILD_CMD="git config --global safe.directory /go/src/github.com/google/cadvisor && env GOOS=linux GOARCH=s390x GO_FLAGS='$GO_FLAGS' CGO_ENABLED=0 ./build/build.sh && \
+    env GOOS=linux GOARCH=s390x CGO_ENABLED=0 go test -c github.com/google/cadvisor/integration/tests/crio && \
+    env GOOS=linux GOARCH=s390x CGO_ENABLED=0 go test -c github.com/google/cadvisor/integration/tests/common"
 
   if [ "$BUILD_PACKAGES" != "" ]; then
     BUILD_CMD="apt update && apt install -y $BUILD_PACKAGES && \
@@ -88,18 +88,18 @@ function run_tests() {
     systemctl --version || true && \
 
     # Install CRI-O and crictl from static binaries (more reliable than apt)
-    CRIO_VERSION=v1.28.0 && \
-    CRICTL_VERSION=v1.28.0 && \
+    CRIO_VERSION=v1.29.3 && \
+    CRICTL_VERSION=v1.29.3 && \
 
     # Download and install crictl
     echo 'Installing crictl...' && \
-    curl -L https://github.com/kubernetes-sigs/cri-tools/releases/download/\${CRICTL_VERSION}/crictl-\${CRICTL_VERSION}-linux-amd64.tar.gz | tar -C /usr/local/bin -xz && \
+    curl -L https://github.com/kubernetes-sigs/cri-tools/releases/download/\${CRICTL_VERSION}/crictl-\${CRICTL_VERSION}-linux-s390x.tar.gz | tar -C /usr/local/bin -xz && \
     chmod +x /usr/local/bin/crictl && \
 
     # Download and install CRI-O from Google Cloud Storage
     echo 'Installing CRI-O...' && \
     mkdir -p /tmp/crio-install && \
-    curl -L https://storage.googleapis.com/cri-o/artifacts/cri-o.amd64.\${CRIO_VERSION}.tar.gz | tar -xz -C /tmp/crio-install && \
+    curl -L https://storage.googleapis.com/cri-o/artifacts/cri-o.s390x.\${CRIO_VERSION}.tar.gz | tar -xz -C /tmp/crio-install && \
     mkdir -p /usr/local/bin /etc/crio /etc/containers && \
     ls -la /tmp/crio-install/cri-o/bin/ && \
     cp /tmp/crio-install/cri-o/bin/crio /usr/local/bin/ && \
@@ -132,7 +132,7 @@ runtime_type = \"oci\"
 runtime_root = \"/run/crun\"
 
 [crio.image]
-pause_image = \"registry.k8s.io/pause:3.9\"
+pause_image = \"registry.k8s.io/pause:3.10\"
 CRIOEOF
 
     # Install crun as the runtime
@@ -148,7 +148,7 @@ CRIOEOF
     echo 'Installing CNI plugins...' && \
     CNI_VERSION=v1.3.0 && \
     mkdir -p /opt/cni/bin && \
-    curl -L \"https://github.com/containernetworking/plugins/releases/download/\${CNI_VERSION}/cni-plugins-linux-amd64-\${CNI_VERSION}.tgz\" | tar -xz -C /opt/cni/bin && \
+    curl -L \"https://github.com/containernetworking/plugins/releases/download/\${CNI_VERSION}/cni-plugins-linux-s390x-\${CNI_VERSION}.tgz\" | tar -xz -C /opt/cni/bin && \
     ls -la /opt/cni/bin/ && \
 
     # Create CNI config for bridge networking
@@ -189,8 +189,8 @@ EOF
 
     # Pull required images
     echo 'Pulling test images...' && \
-    /usr/local/bin/crictl pull registry.k8s.io/pause:3.9 || true && \
-    /usr/local/bin/crictl pull registry.k8s.io/busybox:1.27 || true && \
+    /usr/local/bin/crictl pull registry.k8s.io/pause:3.10 || true && \
+    /usr/local/bin/crictl pull busybox:1.36 || true && \
 
     # Add /usr/local/bin to PATH for the test runner
     export PATH=/usr/local/bin:\$PATH && \

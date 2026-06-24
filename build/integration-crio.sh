@@ -65,8 +65,8 @@ start_crio_if_needed() {
   # Install conmon if not available (CRI-O requires it)
   if ! command -v conmon >/dev/null 2>&1 && [ ! -x /usr/local/bin/conmon ]; then
     echo ">> Installing conmon..."
-    CONMON_VERSION=v2.1.8
-    curl -L https://github.com/containers/conmon/releases/download/${CONMON_VERSION}/conmon.amd64 -o /usr/local/bin/conmon 2>/dev/null && \
+    CONMON_VERSION=v2.1.10
+    curl -L https://github.com/containers/conmon/releases/download/${CONMON_VERSION}/conmon.s390x -o /usr/local/bin/conmon 2>/dev/null && \
     chmod +x /usr/local/bin/conmon
   fi
 
@@ -80,7 +80,7 @@ start_crio_if_needed() {
     echo ">> Installing CNI plugins..."
     CNI_VERSION=v1.3.0
     mkdir -p /opt/cni/bin
-    curl -L "https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-amd64-${CNI_VERSION}.tgz" | tar -xz -C /opt/cni/bin
+    curl -L "https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-s390x-${CNI_VERSION}.tgz" | tar -xz -C /opt/cni/bin
   fi
 
   # Create CNI config for bridge networking
@@ -112,7 +112,7 @@ runtime_type = "oci"
 runtime_root = "/run/crun"
 
 [crio.image]
-pause_image = "registry.k8s.io/pause:3.9"
+pause_image = "registry.k8s.io/pause:3.10"
 EOF
 
   # Also configure containers storage
