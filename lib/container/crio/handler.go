@@ -247,7 +247,7 @@ func (h *crioContainerHandler) getFsStats(stats *info.ContainerStats) error {
 	}
 	var device string
 	switch h.storageDriver {
-	case overlay2StorageDriver, overlayStorageDriver:
+	case overlay2StorageDriver, overlayStorageDriver, vfsStorageDriver:
 		deviceInfo, err := h.fsInfo.GetDirFsDevice(h.rootfsStorageDir)
 		if err != nil {
 			return fmt.Errorf("unable to determine device info for dir: %v: %v", h.rootfsStorageDir, err)

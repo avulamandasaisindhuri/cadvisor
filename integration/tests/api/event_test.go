@@ -87,7 +87,7 @@ func TestOomKillEventConstraint(t *testing.T) {
 
 			containerID := fm.Docker().Run(
 				framework.DockerRunArgs{
-					Image: "registry.k8s.io/busybox:1.27",
+					Image: "public.ecr.aws/docker/library/busybox:1.32",
 					Args:  []string{"-m=" + tt.memLimit},
 				},
 				"sh", "-c", "a=1; while true; do a=\"${a}${a}\"; done",
@@ -129,7 +129,7 @@ func TestMemoryEventsMaxMetricAfterOom(t *testing.T) {
 
 	containerID := fm.Docker().Run(
 		framework.DockerRunArgs{
-			Image: "registry.k8s.io/busybox:1.27",
+			Image: "public.ecr.aws/docker/library/busybox:1.32",
 			Args:  []string{"-m=8M", "--memory-swap=8M"},
 		},
 		"sh", "-c", "dd if=/dev/zero of=/tmp/data bs=1M count=100; sleep 60",

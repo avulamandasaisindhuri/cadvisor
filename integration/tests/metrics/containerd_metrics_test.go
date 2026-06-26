@@ -177,7 +177,7 @@ func TestContainerdContainerLabelsInMetrics(t *testing.T) {
 
 	// Start a container with custom labels
 	containerID := fm.Containerd().Run(framework.ContainerdRunArgs{
-		Image: "registry.k8s.io/pause:3.9",
+		Image: "registry.k8s.io/pause:3.10",
 		Labels: map[string]string{
 			"io.kubernetes.pod.name": "test-pod",
 		},
@@ -209,7 +209,7 @@ func TestContainerdContainerImageInMetrics(t *testing.T) {
 	defer fm.Cleanup()
 
 	containerID := fm.Containerd().Run(framework.ContainerdRunArgs{
-		Image: "registry.k8s.io/pause:3.9",
+		Image: "registry.k8s.io/pause:3.10",
 	})
 
 	found := waitForContainerdContainerViaAPI(containerID, fm, 15*time.Second)

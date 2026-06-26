@@ -59,6 +59,7 @@ if ! command -v ctr &> /dev/null; then
   CTR_VERSION="1.7.24"
   CTR_ARCH="amd64"
   [ "$(uname -m)" = "aarch64" ] && CTR_ARCH="arm64"
+  [ "$(uname -m)" = "s390x" ] && CTR_ARCH="s390x"
   curl -sL "https://github.com/containerd/containerd/releases/download/v${CTR_VERSION}/containerd-${CTR_VERSION}-linux-${CTR_ARCH}.tar.gz" | sudo tar -xz -C /usr/local
 fi
 

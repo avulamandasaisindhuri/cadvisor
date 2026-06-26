@@ -122,7 +122,7 @@ func TestContainerdContainerByName(t *testing.T) {
 	// Generate a 64-char hex ID (this is what Kubernetes/CRI uses)
 	containerID := fmt.Sprintf("%032x%032x", os.Getpid(), 999999)
 	_ = fm.Containerd().Run(framework.ContainerdRunArgs{
-		Image: "registry.k8s.io/pause:3.9",
+		Image: "registry.k8s.io/pause:3.10",
 		Name:  containerID, // Using hex ID as the name
 	})
 
@@ -285,7 +285,7 @@ func TestContainerdContainerLabels(t *testing.T) {
 
 	// Use auto-generated 64-char hex ID (required by cAdvisor's containerd handler)
 	containerID := fm.Containerd().Run(framework.ContainerdRunArgs{
-		Image: "registry.k8s.io/pause:3.9",
+		Image: "registry.k8s.io/pause:3.10",
 		Labels: map[string]string{
 			"test.label.key": "test-value",
 		},
@@ -365,7 +365,7 @@ func TestContainerdContainerImageInfo(t *testing.T) {
 	fm := framework.New(t)
 	defer fm.Cleanup()
 
-	expectedImage := "registry.k8s.io/pause:3.9"
+	expectedImage := "registry.k8s.io/pause:3.10"
 	containerID := fm.Containerd().Run(framework.ContainerdRunArgs{
 		Image: expectedImage,
 	})

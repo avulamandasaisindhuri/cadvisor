@@ -49,6 +49,7 @@ const (
 	// TODO add full set of supported drivers in future..
 	overlayStorageDriver  storageDriver = "overlay"
 	overlay2StorageDriver storageDriver = "overlay2"
+	vfsStorageDriver      storageDriver = "vfs"
 )
 
 type crioFactory struct {
