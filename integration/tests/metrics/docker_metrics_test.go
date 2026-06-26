@@ -118,7 +118,7 @@ func TestDockerContainerMemoryMetrics(t *testing.T) {
 
 	// Start a container with a memory limit
 	containerID := fm.Docker().Run(framework.DockerRunArgs{
-		Image: "registry.k8s.io/pause",
+		Image: "registry.k8s.io/pause:3.10",
 		Args:  []string{"--memory=128m"},
 	})
 
@@ -210,7 +210,7 @@ func TestDockerContainerLabelsInMetrics(t *testing.T) {
 
 	// Start a container with custom labels
 	containerID := fm.Docker().Run(framework.DockerRunArgs{
-		Image: "registry.k8s.io/pause",
+		Image: "registry.k8s.io/pause:3.10",
 		Args:  []string{"--label", "test.label=test-value"},
 	})
 
@@ -242,7 +242,7 @@ func TestDockerContainerImageInMetrics(t *testing.T) {
 	defer fm.Cleanup()
 
 	containerID := fm.Docker().Run(framework.DockerRunArgs{
-		Image: "registry.k8s.io/pause",
+		Image: "registry.k8s.io/pause:3.10",
 	})
 
 	client := framework.NewMetricsClient(fm.Hostname())
@@ -367,7 +367,7 @@ func TestDockerContainerMemoryFailcnt(t *testing.T) {
 	defer fm.Cleanup()
 
 	containerID := fm.Docker().Run(framework.DockerRunArgs{
-		Image: "registry.k8s.io/pause",
+		Image: "registry.k8s.io/pause:3.10",
 		Args:  []string{"--memory=64m"},
 	})
 

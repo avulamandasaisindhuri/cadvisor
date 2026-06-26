@@ -57,8 +57,7 @@ echo "=== End diagnostic information ==="
 # Install ctr (containerd CLI) if not available - needed for containerd integration tests
 if ! command -v ctr &> /dev/null; then
   CTR_VERSION="1.7.24"
-  CTR_ARCH="amd64"
-  [ "$(uname -m)" = "aarch64" ] && CTR_ARCH="arm64"
+  CTR_ARCH=$(go env GOARCH)
   curl -sL "https://github.com/containerd/containerd/releases/download/v${CTR_VERSION}/containerd-${CTR_VERSION}-linux-${CTR_ARCH}.tar.gz" | sudo tar -xz -C /usr/local
 fi
 

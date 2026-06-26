@@ -31,7 +31,7 @@ trap delete EXIT INT TERM
 function run_tests() {
 
   # Add safe.directory as workaround for https://github.com/actions/runner/issues/2033
-  BUILD_CMD="git config --global safe.directory /go/src/github.com/google/cadvisor && env GOOS=linux GOARCH=amd64 GO_FLAGS='$GO_FLAGS' ./build/build.sh && \
+  BUILD_CMD="git config --global safe.directory /go/src/github.com/google/cadvisor && env GOOS=linux GOARCH=$(go env GOARCH) GO_FLAGS='$GO_FLAGS' ./build/build.sh && \
     env GOOS=linux GOFLAGS='$GO_FLAGS' go test -c github.com/google/cadvisor/integration/tests/api && \
     env GOOS=linux GOFLAGS='$GO_FLAGS' go test -c github.com/google/cadvisor/integration/tests/common && \
     env GOOS=linux GOFLAGS='$GO_FLAGS' go test -c github.com/google/cadvisor/integration/tests/metrics"
@@ -41,7 +41,7 @@ function run_tests() {
     $BUILD_CMD"
   fi
   docker run --rm \
-    --platform linux/amd64 \
+    --platform linux/$(go env GOARCH) \
     -w /go/src/github.com/google/cadvisor \
     -v ${PWD}:/go/src/github.com/google/cadvisor \
     golang:"$GOLANG_VERSION-$DEBIAN_VERSION" \
@@ -54,7 +54,7 @@ function run_tests() {
 
   mkdir ${TMPDIR}/docker-graph
   docker run --rm \
-    --platform linux/amd64 \
+    --platform linux/$(go env GOARCH) \
     -w /go/src/github.com/google/cadvisor \
     -v ${ROOT}:/go/src/github.com/google/cadvisor \
     ${EXTRA_DOCKER_OPTS} \
@@ -65,6 +65,7 @@ function run_tests() {
     bash -c "export DEBIAN_FRONTEND=noninteractive && \
     apt update && \
     apt install -y $PACKAGES && \
+    git config --global --add safe.directory /go/src/github.com/google/cadvisor && \
     CADVISOR_ARGS=$CADVISOR_ARGS /usr/local/bin/runner.sh build/integration.sh"
 }
 
