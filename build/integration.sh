@@ -139,7 +139,7 @@ if [[ "${DOCKER_IN_DOCKER_ENABLED:-}" == "true" ]]; then
 fi
 
 docker pull registry.k8s.io/pause:3.10
-docker pull docker.io/library/busybox:1.27
+docker pull public.ecr.aws/docker/library/busybox:1.32
 
 echo ">> running integration tests against local cAdvisor"
 if ! [ -f ./api.test ] || ! [ -f ./common.test ] || ! [ -f ./metrics.test ]; then

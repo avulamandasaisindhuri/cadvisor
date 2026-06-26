@@ -321,7 +321,7 @@ func (a dockerActions) RunPause() string {
 // Run the specified command in a Docker busybox container.
 func (a dockerActions) RunBusybox(cmd ...string) string {
 	return a.Run(DockerRunArgs{
-		Image: "docker.io/library/busybox:1.27",
+		Image: "public.ecr.aws/docker/library/busybox:1.32",
 	}, cmd...)
 }
 
@@ -507,7 +507,7 @@ func (a *crioActions) RunPause() string {
 
 func (a *crioActions) RunBusybox(cmd ...string) string {
 	return a.Run(CrioRunArgs{
-		Image: "docker.io/library/busybox:1.27",
+		Image: "public.ecr.aws/docker/library/busybox:1.32",
 	}, cmd...)
 }
 
@@ -613,7 +613,7 @@ func (a *containerdActions) RunPause() string {
 
 func (a *containerdActions) RunBusybox(cmd ...string) string {
 	return a.Run(ContainerdRunArgs{
-		Image: "docker.io/library/busybox:1.27",
+		Image: "public.ecr.aws/docker/library/busybox:1.32",
 	}, cmd...)
 }
 

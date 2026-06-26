@@ -406,7 +406,7 @@ func TestDockerHealthState(t *testing.T) {
 	defer fm.Cleanup()
 
 	containerID := fm.Docker().Run(framework.DockerRunArgs{
-		Image: "docker.io/library/busybox:1.27",
+		Image: "public.ecr.aws/docker/library/busybox:1.32",
 		Args: []string{
 			"--health-cmd", "exit 0",
 			"--health-interval", "1s",
@@ -441,7 +441,7 @@ func TestDockerContainerRestartCount(t *testing.T) {
 	// Run a container that runs briefly then exits with failure, with restart policy
 	// The sleep gives cAdvisor time to detect the container between restarts
 	fm.Docker().Run(framework.DockerRunArgs{
-		Image: "docker.io/library/busybox:1.27",
+		Image: "public.ecr.aws/docker/library/busybox:1.32",
 		Args: []string{
 			"--name", containerName,
 			"--restart", "on-failure:5",

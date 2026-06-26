@@ -197,7 +197,7 @@ EOF
     # Pull required images
     echo 'Pulling test images...' && \
     /usr/local/bin/crictl pull registry.k8s.io/pause:3.10 || true && \
-    /usr/local/bin/crictl pull docker.io/library/busybox:1.27 || true && \
+    /usr/local/bin/crictl pull public.ecr.aws/docker/library/busybox:1.32 || true && \
 
     # Add /usr/local/bin to PATH for the test runner
     export PATH=/usr/local/bin:\$PATH && \
