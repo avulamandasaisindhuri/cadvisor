@@ -77,7 +77,7 @@ func (c *Connection) WriteMessage(msg syscall.NetlinkMessage) error {
 	msg.Header.Seq = c.seq
 	c.seq++
 	msg.Header.Pid = c.pid
-	err := binary.Write(w, binary.LittleEndian, msg.Header)
+	err := binary.Write(w, Endian, msg.Header)
 	if err != nil {
 		return err
 	}
@@ -90,7 +90,7 @@ func (c *Connection) WriteMessage(msg syscall.NetlinkMessage) error {
 }
 
 func (c *Connection) ReadMessage() (msg syscall.NetlinkMessage, err error) {
-	err = binary.Read(c.rbuf, binary.LittleEndian, &msg.Header)
+	err = binary.Read(c.rbuf, Endian, &msg.Header)
 	if err != nil {
 		return msg, err
 	}

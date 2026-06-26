@@ -45,40 +45,40 @@ func TestCollector_UpdateStats(t *testing.T) {
 	notScaledBuffer := buffer{bytes.NewBuffer([]byte{})}
 	scaledBuffer := buffer{bytes.NewBuffer([]byte{})}
 	groupedBuffer := buffer{bytes.NewBuffer([]byte{})}
-	err := binary.Write(notScaledBuffer, binary.LittleEndian, GroupReadFormat{
+	err := binary.Write(notScaledBuffer, binary.NativeEndian, GroupReadFormat{
 		Nr:          1,
 		TimeEnabled: 100,
 		TimeRunning: 100,
 	})
 	assert.NoError(t, err)
-	err = binary.Write(notScaledBuffer, binary.LittleEndian, Values{
+	err = binary.Write(notScaledBuffer, binary.NativeEndian, Values{
 		Value: 123456789,
 		ID:    0,
 	})
 	assert.NoError(t, err)
-	err = binary.Write(scaledBuffer, binary.LittleEndian, GroupReadFormat{
+	err = binary.Write(scaledBuffer, binary.NativeEndian, GroupReadFormat{
 		Nr:          1,
 		TimeEnabled: 3,
 		TimeRunning: 1,
 	})
 	assert.NoError(t, err)
-	err = binary.Write(scaledBuffer, binary.LittleEndian, Values{
+	err = binary.Write(scaledBuffer, binary.NativeEndian, Values{
 		Value: 333333333,
 		ID:    2,
 	})
 	assert.NoError(t, err)
-	err = binary.Write(groupedBuffer, binary.LittleEndian, GroupReadFormat{
+	err = binary.Write(groupedBuffer, binary.NativeEndian, GroupReadFormat{
 		Nr:          2,
 		TimeEnabled: 100,
 		TimeRunning: 100,
 	})
 	assert.NoError(t, err)
-	err = binary.Write(groupedBuffer, binary.LittleEndian, Values{
+	err = binary.Write(groupedBuffer, binary.NativeEndian, Values{
 		Value: 123456,
 		ID:    0,
 	})
 	assert.NoError(t, err)
-	err = binary.Write(groupedBuffer, binary.LittleEndian, Values{
+	err = binary.Write(groupedBuffer, binary.NativeEndian, Values{
 		Value: 654321,
 		ID:    1,
 	})
@@ -405,9 +405,9 @@ func TestReadPerfStat(t *testing.T) {
 	for _, test := range readGroupPerfStatCases {
 		t.Run(test.test, func(tt *testing.T) {
 			buf := &buffer{bytes.NewBuffer([]byte{})}
-			err := binary.Write(buf, binary.LittleEndian, test.file)
+			err := binary.Write(buf, binary.NativeEndian, test.file)
 			assert.NoError(tt, err)
-			err = binary.Write(buf, binary.LittleEndian, test.valuesFile)
+			err = binary.Write(buf, binary.NativeEndian, test.valuesFile)
 			assert.NoError(tt, err)
 			stat, err := readGroupPerfStat(buf, group{
 				cpuFiles:   nil,

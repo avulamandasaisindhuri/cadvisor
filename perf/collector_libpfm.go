@@ -141,13 +141,13 @@ func getPerfValues(file readerCloser, group group) ([]info.PerfValue, error) {
 	}
 	perfData := &GroupReadFormat{}
 	reader := bytes.NewReader(buf[:24])
-	err = binary.Read(reader, binary.LittleEndian, perfData)
+	err = binary.Read(reader, binary.NativeEndian, perfData)
 	if err != nil {
 		return []info.PerfValue{}, fmt.Errorf("unable to decode perf event group ( leader = %s ): %w", group.leaderName, err)
 	}
 	values := make([]Values, perfData.Nr)
 	reader = bytes.NewReader(buf[24:])
-	err = binary.Read(reader, binary.LittleEndian, values)
+	err = binary.Read(reader, binary.NativeEndian, values)
 	if err != nil {
 		return []info.PerfValue{}, fmt.Errorf("unable to decode perf event group values ( leader = %s ): %w", group.leaderName, err)
 	}

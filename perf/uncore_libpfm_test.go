@@ -287,9 +287,9 @@ func TestReadPerfUncoreStat(t *testing.T) {
 	}
 
 	buf := &buffer{bytes.NewBuffer([]byte{})}
-	err := binary.Write(buf, binary.LittleEndian, file)
+	err := binary.Write(buf, binary.NativeEndian, file)
 	assert.NoError(t, err)
-	err = binary.Write(buf, binary.LittleEndian, valuesFile)
+	err = binary.Write(buf, binary.NativeEndian, valuesFile)
 	assert.NoError(t, err)
 
 	stat, err := readPerfUncoreStat(buf, group{
