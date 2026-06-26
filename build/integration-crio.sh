@@ -19,6 +19,14 @@ set -e
 # permissions if cadvisor can't find containers.
 # USE_SUDO=true make test-integration-crio
 USE_SUDO=${USE_SUDO:-false}
+
+# Determine Go architecture
+case "$(uname -m)" in
+    x86_64) GOARCH="amd64" ;;
+    s390x) GOARCH="s390x" ;;
+    *) echo "Unsupported architecture $(uname -m)" >&2; exit 1 ;;
+esac
+
 cadvisor_bin=${CADVISOR_BIN:-"./_output/cadvisor"}
 
 if ! [ -f "$cadvisor_bin" ]; then
@@ -66,7 +74,7 @@ start_crio_if_needed() {
   if ! command -v conmon >/dev/null 2>&1 && [ ! -x /usr/local/bin/conmon ]; then
     echo ">> Installing conmon..."
     CONMON_VERSION=v2.1.11
-    curl -L https://github.com/containers/conmon/releases/download/${CONMON_VERSION}/conmon.$(go env GOARCH) -o /usr/local/bin/conmon 2>/dev/null && \
+    curl -L https://github.com/containers/conmon/releases/download/${CONMON_VERSION}/conmon.${GOARCH} -o /usr/local/bin/conmon 2>/dev/null && \
     chmod +x /usr/local/bin/conmon
   fi
 
@@ -80,7 +88,7 @@ start_crio_if_needed() {
     echo ">> Installing CNI plugins..."
     CNI_VERSION=v1.4.1
     mkdir -p /opt/cni/bin
-    curl -L "https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-$(go env GOARCH)-${CNI_VERSION}.tgz" | tar -xz -C /opt/cni/bin
+    curl -L "https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${GOARCH}-${CNI_VERSION}.tgz" | tar -xz -C /opt/cni/bin
   fi
 
   # Create CNI config for bridge networking

@@ -16,6 +16,13 @@
 
 set -ex
 
+# Determine Go architecture
+case "$(uname -m)" in
+    x86_64) GOARCH="amd64" ;;
+    s390x) GOARCH="s390x" ;;
+    *) echo "Unsupported architecture $(uname -m)" >&2; exit 1 ;;
+esac
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE}")/.." && pwd -P)"
 TMPDIR=$(mktemp -d)
 function delete() {
@@ -31,13 +38,13 @@ trap delete EXIT INT TERM
 function run_tests() {
 
   # Detect architecture
-  DOCKER_PLATFORM="linux/$(go env GOARCH)"
+  DOCKER_PLATFORM="linux/${GOARCH}"
 
   # Add safe.directory as workaround for https://github.com/actions/runner/issues/2033
   # Build for the target architecture
-  BUILD_CMD="git config --global safe.directory /go/src/github.com/google/cadvisor && env GOOS=linux GOARCH=$(go env GOARCH) GO_FLAGS='$GO_FLAGS' CGO_ENABLED=0 ./build/build.sh && \
-    env GOOS=linux GOARCH=$(go env GOARCH) CGO_ENABLED=0 go test -c github.com/google/cadvisor/integration/tests/crio && \
-    env GOOS=linux GOARCH=$(go env GOARCH) CGO_ENABLED=0 go test -c github.com/google/cadvisor/integration/tests/common"
+  BUILD_CMD="git config --global safe.directory /go/src/github.com/google/cadvisor && env GOOS=linux GOARCH=${GOARCH} GO_FLAGS='$GO_FLAGS' CGO_ENABLED=0 ./build/build.sh && \
+    env GOOS=linux GOARCH=${GOARCH} CGO_ENABLED=0 go test -c github.com/google/cadvisor/integration/tests/crio && \
+    env GOOS=linux GOARCH=${GOARCH} CGO_ENABLED=0 go test -c github.com/google/cadvisor/integration/tests/common"
 
   if [ "$BUILD_PACKAGES" != "" ]; then
     BUILD_CMD="apt update && apt install -y $BUILD_PACKAGES && \
@@ -93,13 +100,13 @@ function run_tests() {
 
     # Download and install crictl
     echo 'Installing crictl...' && \
-    curl -L https://github.com/kubernetes-sigs/cri-tools/releases/download/\${CRICTL_VERSION}/crictl-\${CRICTL_VERSION}-linux-$(go env GOARCH).tar.gz | tar -C /usr/local/bin -xz && \
+    curl -L https://github.com/kubernetes-sigs/cri-tools/releases/download/\${CRICTL_VERSION}/crictl-\${CRICTL_VERSION}-linux-${GOARCH}.tar.gz | tar -C /usr/local/bin -xz && \
     chmod +x /usr/local/bin/crictl && \
 
     # Download and install CRI-O from Google Cloud Storage
     echo 'Installing CRI-O...' && \
     mkdir -p /tmp/crio-install && \
-    curl -L https://storage.googleapis.com/cri-o/artifacts/cri-o.$(go env GOARCH).\${CRIO_VERSION}.tar.gz | tar -xz -C /tmp/crio-install && \
+    curl -L https://storage.googleapis.com/cri-o/artifacts/cri-o.${GOARCH}.\${CRIO_VERSION}.tar.gz | tar -xz -C /tmp/crio-install && \
     mkdir -p /usr/local/bin /etc/crio /etc/containers && \
     ls -la /tmp/crio-install/cri-o/bin/ && \
     cp /tmp/crio-install/cri-o/bin/crio /usr/local/bin/ && \
@@ -148,7 +155,7 @@ CRIOEOF
     echo 'Installing CNI plugins...' && \
     CNI_VERSION=v1.4.1 && \
     mkdir -p /opt/cni/bin && \
-    curl -L \"https://github.com/containernetworking/plugins/releases/download/\${CNI_VERSION}/cni-plugins-linux-$(go env GOARCH)-\${CNI_VERSION}.tgz\" | tar -xz -C /opt/cni/bin && \
+    curl -L \"https://github.com/containernetworking/plugins/releases/download/\${CNI_VERSION}/cni-plugins-linux-${GOARCH}-\${CNI_VERSION}.tgz\" | tar -xz -C /opt/cni/bin && \
     ls -la /opt/cni/bin/ && \
 
     # Create CNI config for bridge networking

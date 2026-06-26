@@ -19,6 +19,14 @@ set -e
 # permissions if you cadvisor can't find containers.
 # USE_SUDO=true make test-integration
 USE_SUDO=${USE_SUDO:-false}
+
+# Determine Go architecture
+case "$(uname -m)" in
+    x86_64) GOARCH="amd64" ;;
+    s390x) GOARCH="s390x" ;;
+    *) echo "Unsupported architecture $(uname -m)" >&2; exit 1 ;;
+esac
+
 cadvisor_bin=${CADVISOR_BIN:-"./_output/cadvisor"}
 
 if ! [ -f "$cadvisor_bin" ]; then
@@ -57,7 +65,7 @@ echo "=== End diagnostic information ==="
 # Install ctr (containerd CLI) if not available - needed for containerd integration tests
 if ! command -v ctr &> /dev/null; then
   CTR_VERSION="1.7.24"
-  CTR_ARCH=$(go env GOARCH)
+  CTR_ARCH=${GOARCH}
   curl -sL "https://github.com/containerd/containerd/releases/download/v${CTR_VERSION}/containerd-${CTR_VERSION}-linux-${CTR_ARCH}.tar.gz" | sudo tar -xz -C /usr/local
 fi
 
