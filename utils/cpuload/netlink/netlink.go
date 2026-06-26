@@ -31,7 +31,7 @@ import (
 var (
 	// TODO(rjnagal): Verify and fix for other architectures.
 
-	Endian = binary.LittleEndian
+	Endian = binary.NativeEndian
 )
 
 type genMsghdr struct {
