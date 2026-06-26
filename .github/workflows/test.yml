@@ -10,6 +10,9 @@ jobs:
     runs-on: ${{ matrix.platform }}
     timeout-minutes: 30
     steps:
+    - name: Clean workspace
+      run: |
+        sudo rm -rf _output *.test *.log cadvisor cmd/cmd release
     - name: Install Go
       uses: actions/setup-go@v6
       with:
@@ -53,6 +56,9 @@ jobs:
     runs-on: ${{ matrix.platform }}
     timeout-minutes: 30
     steps:
+    - name: Clean workspace
+      run: |
+        sudo rm -rf _output *.test *.log cadvisor cmd/cmd release
     - name: Checkout code
       uses: actions/checkout@v6
     - name: Run integration tests
@@ -77,6 +83,9 @@ jobs:
     runs-on: ${{ matrix.platform }}
     timeout-minutes: 30
     steps:
+    - name: Clean workspace
+      run: |
+        sudo rm -rf _output *.test *.log cadvisor cmd/cmd release
     - name: Checkout code
       uses: actions/checkout@v6
     - name: Run CRI-O integration tests
